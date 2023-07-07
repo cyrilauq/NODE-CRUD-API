@@ -92,6 +92,32 @@ app.post("/product", async (req, res) => {
   }
 });
 
+/**
+ * Delete a product
+ */
+app.delete("/products/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(`Delete product with id: ${id}`);
+  try {
+    /**
+     * Will get a product with a given id and update it
+     * It will also return a product if there was an update
+     */
+    const product = await Product.findByIdAndDelete(id);
+    /**
+     * If no product found
+     */
+    if (!product) {
+      return res
+        .status(400)
+        .json({ message: `Cannot find any product with ID: ${id}` });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 mongoose.set("strictQuery", false);
 
 mongoose
