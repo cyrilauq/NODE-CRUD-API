@@ -1,5 +1,10 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
+
+const username = "root";
+const password = "6VkOR49scvp1DZNz";
+const collection_name = "NodeApi";
 
 const PORT = 3000;
 
@@ -14,9 +19,19 @@ app.get("/", (req, res) => {
 });
 
 app.get("/blog", (req, res) => {
-  res.send("Hello from NODE API");
+  res.send("Hello Blog from NODE API");
 });
 
-app.listen(PORT, () => {
-  console.log(`Node API is running on port: ${PORT}`);
-});
+mongoose
+  .connect(
+    `mongodb+srv://${username}:${password}@crud-api.scdzuyk.mongodb.net/${collection_name}?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`Node API is running on port: ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
